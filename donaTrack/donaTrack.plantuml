@@ -1,0 +1,214 @@
+@startuml donaTrack
+
+
+class Donante{
+    -nombre: String
+    -apellido: String
+    -razonSocial: RazonSocial
+}
+
+
+enum RazonSocial{
+    srl,
+    sa,
+    etc
+}
+
+
+class Donacion{
+    -donante: Donante
+    -descripcion:String
+    -bienes: List<Bien>
+    -estado : Estado
+    -beneficiario: Beneficiario
+    -algoritmo: AlgoritmoGenerador
+    -fotos: List<String>
+}
+
+
+class Estado{
+    -tipo : PosibleEstaado
+    -fecha: LocalDateTime
+}
+
+
+enum PosibleEstaado{
+	LISTA_PARA_ENTREGAR,
+    PENDIENTE_DE_RECEPCION,
+    EN_DEPOSITO
+}
+
+
+class Bien{
+    -categoria: Categoria
+    -nombre: String
+    -cantidad: Integer
+    -fechaVencimiento: LocalDate
+    -esUsado:Boolean
+}
+
+
+class Categoria{
+    -nombre:String
+    -nececitaFechaVencimiento: Boolean
+    -necesitaSaberUso:Boolean
+}
+
+
+class Beneficiario{
+nombre: String 
+razonSocial:RazonSocial
+direccio: Direccion
+nroTel: String
+correo: String
+necesiadesMateriales: List<NecesidadMaterial>
+}
+
+
+class Direccion{
+altura
+calle
+piso
+latitud
+longitud
+provincia
+}
+
+
+class Validador{
+validarRazonSocial(beneficiario Beneficiario) : boolean
+}
+
+
+interface IRegistroNacionalAdapter{
+validarRazonSocial(beneficiario Beneificiario) : boolean
+}
+
+
+class RegistroNacionalAdapter implements IRegistroNacionalAdapter{
+	-apiRegistroNacional : APIRegistroNacional
+validarRazonSocial(beneficiario Beneificiario) : boolean
+}
+
+
+class APIRegistroNacional{
+razonSocialCorrecta(beneficiario Beneficiario): Boolean
+}
+
+
+class NecesidadMaterial{
+ -descripción: String
+ -beneficiario: Beneficiario
+ - categoria: Categoria
+}
+
+
+interface AlgoritmoGenerador{
+generarRanking(donacion Donacion): List<Beneficiario>
+}
+
+
+class CompMatch implements AlgoritmoGenerador{
+generarRanking(donacion Donacion): List<Beneficiario>
+}
+
+
+class EquiReach implements AlgoritmoGenerador{
+generarRanking(donacion Donacion): List<Beneficiario>
+}
+
+class Camion {
+patente: String
+capacidadM3: Float
+alturaMetros: Float
+pesoKg: Float
+estaDisponible: Bool
+}
+
+
+class Entrega{
+-codEntrega: String
+-lat: Double
+-long: Double
+-direccion: String 
+-pesoKG: Float
+-volumenM3: Float
+-camion: Camion
+}
+
+
+class Deposito {
+-lat: Double
+-lon: Double
+-direccion: String
+}
+
+
+class VentanaHoraria{
+-desde: LocalDateTime
+-hasta: LocalDateTime
+}
+
+
+class EntregaOutputDTO{
+	-deposito: Deposito
+    -entregas : List<Entrega>
+    -ventanaHoraria: VentanaHoraria
+camiones : List<Camion>
+}
+
+class GeneradorPlanDeRutas{
+    -iaGeneradora: IAAdapter
+    +generarRutas(EntregaOutputDto): List<Ruta>
+}
+
+
+interface IAAdapter{
+    +generarRutas(EntregaOutputDto): List<Ruta>
+}
+
+
+class RuthyAdapter implements IAAdapter{
+    -ruthy: Ruthy
+    +generarRutas(EntregaOutputDto): List<Ruta>
+}
+
+
+class Ruthy{
++obtenerRutaPara(entrega EntregaOutputDTO) : rutaInputDTO
+}
+
+
+class rutaInputDTO{
+todo eso q devuelve
+}
+
+
+Donante --> "*" Donacion
+Donacion --> "*" Bien
+Bien --> Categoria
+Donacion --> Estado
+Estado --> PosibleEstaado
+Donante --> RazonSocial
+IRegistroNacionalAdapter ..> Beneficiario
+Beneficiario --> Direccion
+Validador ..> Beneficiario
+RegistroNacionalAdapter-->ApiRegistroNacional
+apiRegistroNacional..>Beneficiario
+NecesidadMaterial-->Beneficiario
+NecesidadMaterial-->Categoria
+AlgoritmoGenerador ..> Donacion
+AlgoritmoGenerador ..> Beneficiario
+Entrega-->Camion
+EntregaOutputDTO --> Deposito
+EntregaOutputDTO --> VentanaHoraria
+EntregaOutputDTO --> "*" Entrega
+EntregaOutputDTO --> "*" Camion
+RuthyAdapter --> Ruthy
+GeneradorPlanDeRutas ..> IAAdapter
+@enduml
+
+
+
+
+

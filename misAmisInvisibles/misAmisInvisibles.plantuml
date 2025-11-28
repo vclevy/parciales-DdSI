@@ -1,0 +1,108 @@
+@startuml
+
+class Participante{
+    -nombre: String
+    -apellido: String 
+    -genero: Genero 
+    -correo: String
+    -wpp: String 
+    -preferencias: List<Preferencia>
+    -regalosFavoritos: List<PosibleRegalo>
+}
+
+Class posibleRegalo{
+    -tipoPreferencia : TipoPreferencia
+    -detalleRegalo : String
+    -recomendacion : String
+}
+
+enum Genero{
+    HOMBRE,
+    MUJER
+}
+
+class Preferencia{
+    tipo:TipoPreferencia
+    valor:String
+}
+
+enum TipoPreferencia{
+    MUSICAL,
+    GASTRONOMICA,
+    COLOR,
+    VIAJES,
+    AROMAS
+}
+
+
+class Grupo{
+    -nombre: String
+    -admin:Participante
+    -participantes: List<Participante>
+    -fechaIncio
+    -fechaFin
+}
+
+class AsignadorDeParejas{
+    -notificador: Notificador
+    +asignarParejas(Grupo grupo): Pareja
+}
+
+interface INotificador{
+    +notificar(participante:Participante , mensaje:String)
+}
+
+class NotificadorWpp implements INotificador{
+    +notificar(Participante participante, mensaje String);
+}
+
+interface IAlgoritmoRegalo {
+    +calcular(participante:Participante):  List<PreferenciaDto>
+}
+
+class AlgoritmoRegalo implements IAlgoritmoRegalo{
+    +calcular(participante:Participante): List<PreferenciaDto>
+} 
+
+interface IAAdapter{
+    +generarSugerencia(regalo: String): String
+}
+
+class ChatGPT implements IAAdapter{
+    +generarSugerencia(regalo: String): String
+}
+
+class CalculadorRegaloPerfecto{
+    -algoritmo:IAlgoritmoRegalo
+    -ia: IAAdapter
+    +calcularRegalos(participante:Participante): List<PosibleRegalo>   
+}
+
+class Feedback{
+    -fecha: LocalDateTime
+    -Grupo: Grupo
+    -participante:Participante
+    -valor: ValorFeedback  
+}
+
+enum ValorFeedback{
+    Muy_acertado,
+    Acertado
+    Aceptable
+    Fue_cualquier_cosa
+}
+
+
+CalculadorRegaloPerfecto ..> Participante
+CalculadorRegaloPerfecto ..> IAlgoritmoRegalo
+CalculadorRegaloPerfecto ..> IAAdapter
+Grupo -->"*" Participante
+Participante --> "*" Preferencia
+Preferencia --> TipoPreferencia
+AsignadorDeParejas ..> Grupo
+AsignadorDeParejas --> INotificador
+Participante --> Genero
+Participante --> "*" posibleRegalo
+CalculadorRegaloPerfecto ..> posibleRegalo
+
+@enduml

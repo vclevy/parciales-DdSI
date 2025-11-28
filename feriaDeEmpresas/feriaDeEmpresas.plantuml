@@ -1,0 +1,15 @@
+@startuml
+
+class Empresa {
+    -nombre: String 
+    -sector:
+    -medioContacto:
+    -logo: String
+    -exentaDePago : boolean
+}
+
+class medioContacto{
+    tipo: ENUM
+    valor: String
+}
+@enduml

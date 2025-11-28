@@ -1,0 +1,126 @@
+@startuml safedrive
+
+class Vehiculo {
+- cliente:Cliente 
+- marca:String
+- modelo: String
+- categoria: Categoria
+- anio: Int 
+- nroChasis: Int 
+- dominio: String 
+- historial: List<Modificacion>
+- nroPoliza: Int 
+- deBaja : Boolean
+- cantidad_km : Double
+}
+
+class Modificacion{
+    -fecha: LocalDateTime
+    -detalle : String
+}
+
+class Categoria{
+    - nombre
+}
+
+class Cliente{
+    - nombre: String
+    - apellido: String 
+    - cuitCuil: String
+    - condicionIva: CondicionIVA
+    - mediosDeContacto: List<MedioDeContacto>
+}
+
+enum CondicionIVA{
+    EXCENTO,
+    MONOTRIBUTISTA,
+    CONSUMIDOR_FINAL
+}
+
+class MedioDeContacto{
+    -tipo : ENUM
+    -valor : String
+}
+
+ENUM tipoContacto{
+    WPP,
+    MAIL,
+    TELEFONO
+}
+
+class SolicitudPoliza{
+    - cliente : Cliente
+    - categoria: Categoria
+    - nivelCobertura: NivelCobertura
+    - UbicacionHabitual: Ubicacion
+    - fecha: LocalDateTime
+    - vehiculo: Vehiculo
+}
+
+class NivelCobertura{
+    - nombre
+}
+
+class Ubicacion{
+    - calle : String
+    - provincia : Provincia_Enum 
+    - altura : Integer
+}
+
+class CalculadorValorPoliza{
+    +calcularPara(Poliza)
+}
+
+class GeneradorPoliza{
+    + generarPoliza(SolicitudPoliza) : Poliza
+}
+
+interface VerificadorAsegurabilidad{
+    + verificar(Vehiculo) : Boolean
+}
+
+class VerificadorKM implements VerificadorAsegurabilidad{
+    - limite: Int
+    + verificar(Vehiculo) : Boolean
+}
+
+class VerificadorKM implements VerificadorAsegurabilidad{
+    - limite: Int
+    + verificar(Vehiculo) : Boolean
+}
+
+class Poliza {
+    - cliente : Cliente
+    - categoria: Categoria
+    - nivelCobertura: NivelCobertura
+    - UbicacionHabitual: Ubicacion
+    - fecha: LocalDateTime
+    - vehiculo: Vehiculo
+    - historialEstados : List<Estado>
+    - estadoActual: Estado
+}
+
+class EstadoPoliza{
+    - estado : PosibleEstado
+    - fecha : LocalDateTime
+}
+
+enum PosibleEstado{
+    EMITIDA,
+    PENDIENTE
+}
+
+Vehiculo --> Categoria
+Vehiculo --> "*" Modificacion
+Vehiculo --> Cliente
+SolicitudPoliza --> Cliente
+Cliente --> CondicionIVA
+Cliente -->"*" MedioDeContacto
+MedioDeContacto --> tipoContacto
+SolicitudPoliza --> Categoria
+SolicitudPoliza --> NivelCobertura
+SolicitudPoliza --> Ubicacion
+GeneradorPoliza ..> VerificadorAsegurabilidad
+Poliza --> "*" EstadoPoliza
+
+@enduml
