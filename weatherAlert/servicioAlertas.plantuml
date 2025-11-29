@@ -1,0 +1,168 @@
+@startuml
+
+
+package ServicioAlertasYRecomendaciones{
+
+interface IClimaProxyAdapter{
+    +suscribir(topic String, callback String) : void
+}
+
+class ClimaProxyAdapter implements IClimaProxyAdapter{
+    -climaProxy: ClimaProxy
+    +suscribir(topic String, callback String) : void
+}
+
+class ClimaProxy{
+    +suscribir(topic String, callback String) : void
+}
+
+class Evento{
+    -tipoEvento:
+    -fechaInicio: LocalDateTime
+    -fechaFin: LocalDateTime
+    -nivelSeveridad: Severidad
+    -zonasAfectadas: List<Zona>
+}
+
+enum Severidad{
+    ALTO,
+        BAJO,
+        MODERADO,
+        EXTREMO,
+        CRITICO
+    }
+
+    class Zona{
+        -lat:Double
+        -long: Double
+        -radioKm: Float
+        -barrio: String
+    }
+
+    interface ICiudadanosAdapter{
+        +consultarCiudadanos(List<zonaDto>) : List<CiudadanoDto>
+    }
+
+    class CiudadanoAdapter implements ICiudadanosAdapter{
+        -servicioCiudadanos : ServicioCiudadanos
+        +consultarCiudadanos(List<zonaDto>) : List<CiudadanoDto>
+
+    }
+
+    class ServicioCiudadanos{
+        +consultarCiudadanos(List<zonaDto>) : List<CiudadanoDto>
+    }
+
+    class Ciudadano{
+        - idEnServicio : long
+        - nombre : String
+        - email : String
+    }
+
+    class Direccion{
+        -ciudadano: Ciudadano
+        idExterno:Long
+        esPrincipal: Boolean
+        tipoConstruccion:String
+        tieneInstalacionesSensibles:Boolean
+    }
+
+    class DomiciliosAfectados{
+        -evento: Evento
+        -domicilios: List<Direcccion>
+    }
+
+    class Recomendacion implements Mensaje{
+        - ciudadano: Ciudadano
+        - texto: String
+        +contenido() : String
+    }
+
+    class Recomendador{
+        -iaAdapter: IaAdapter
+        +generarRecomendaciones(domiciliosAfectados List<DomiciliosAfectados>) : List<Recomendacion>
+    }
+
+    interface IAAdapter{
+        +enriquecerTexto(RecomendacionDTO): String
+    }
+
+    class GPTAdapter implements IAAdapter{
+        -gpt: GPT
+        +enriquecerTexto(RecomendacionDTO): String
+    }
+
+    class GPT{
+        +enriquecerTexto(RecomendacionDTO): String
+    }
+
+    class GeneradorAlertas{
+        -notificador: INotificador
+        +generarAlertas(eventos List<Evento>): void
+    }
+
+    class Alerta implements Mensaje{
+        -ciudadano: Ciudadano
+        +contenido() : String
+    }
+
+    interface INotificador{
+        +notificar(mensaje Mensaje, ciudadano Ciudadano):void
+    }
+
+    class EmailSender implements INotificador{
+        +notificar(mensaje Mensaje, ciudadano Ciudadano):void
+    }
+
+    class NotificadorPush{
+        +notificar(mensaje Mensaje, ciudadano Ciudadano):void
+    }
+
+    interface Mensaje{
+        +contenido() : String
+    }
+
+    interface IOrganismosExternosAdapter{
+        + notificarEmergencia(evento EventoDTO) : void
+    }
+
+    class OrganismosExternosAdapter implements IOrganismosExternosAdapter{
+        -organismo : OrganismoExterno
+        + notificarEmergencia(evento EventoDTO) : void
+    }
+
+    class OrganismosExternos{
+        callback: String
+        + notificarEmergencia(evento EventoDTO) : void
+    }
+
+    class EstacionInteligente{
+        idEnServicio : Long
+    }
+
+    class ActivadorAlarmasFisicas{
+        + activarAlarma(alarmaDTO) : void
+    }
+
+
+    ClimaProxyAdapter-->ClimaProxy
+    Evento-->Severidad
+    Evento-->"*"Zona
+    CiudadanoAdapter --> ServicioCiudadanos
+    Recomendador-->IAAdapter
+    Recomendador..>Recomendacion
+    GPTAdapter-->GPT
+    Ciudadano-->"*"Direccion
+    DomiciliosAfectados-->Evento
+    DomiciliosAfectados-->"*"Direccion
+    Recomendador..>DomiciliosAfectados
+    Recomendador..>INotificador
+    OrganismosExternosAdapter --> OrganismoExterno
+
+}
+
+
+package ServicioFeedback{
+
+}
+    @enduml
