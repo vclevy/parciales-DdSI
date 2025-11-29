@@ -160,9 +160,4 @@ enum Severidad{
     OrganismosExternosAdapter --> OrganismoExterno
 
 }
-
-
-package ServicioFeedback{
-
-}
     @enduml

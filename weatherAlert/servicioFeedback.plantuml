@@ -1,1 +1,37 @@
-es el modelo pregunta rta de toda la vida
+@startuml
+
+class Feedback{
+    - calificacion : Integer
+    - personaIdEnServicio : Long
+    - respuestas : List<Respuesta> 
+    - acciones: String
+}
+
+class Respuesta{
+    - pregunta : Pregunta
+    - valorTexto : String
+    - opcionesChoice : List<Opcion>
+}
+
+class Pregunta{
+    -nombre: String
+    -tipoPregunta: TipoDePregunta
+    -opciones: List<Opcion>
+}
+
+class Opcion{
+    -valor: String
+}
+
+enum TipoDePregunta{
+    MULTIPLE_CHOICE,
+    TEXTO_LIBRE
+}
+
+Feedback-->"*" Respuesta 
+Respuesta -->"*"Opcion
+Respuesta --> Pregunta
+Pregunta-->TipoDePregunta
+Pregunta-->"*"Opcion
+
+@enduml
