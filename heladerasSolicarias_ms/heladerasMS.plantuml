@@ -1,0 +1,143 @@
+@startuml helSol
+
+package Donacion{
+
+class PersonaSolidaria{
+    -nombre: String 
+    -apellido: String 
+    -mediosContacto: MedioContacto
+    -fechaNac: LocalDate
+    -direccion: Direccion
+    -formasColaboracion: List<FormaDeColaborar>
+}
+
+class FormaDeColaborar{
+    -frecuencia: Frecuencia
+    -tipoColaboracion: TipoColaboracion
+    -vecesFrecuencia: Int
+    -montoDinero : Float
+    -vehiculo: Vehiculo
+    -vianda: Vianda
+}
+
+class Vianda{
+    -descripcion: String
+    -cantidad: Int
+}
+
+class Vehiculo{
+    -nombre:String 
+    -capacidadM3: Float
+    -capacidadKg: FLoat
+    -lat: Double
+    -long: Double
+    -radioKm: Float
+}
+
+enum Frecuencia{
+    DIA,
+    HORA,
+    SEMANA,
+    MES
+}
+
+class TipoColaboracion{ 
+    -nombre: String
+}
+
+class MedioContacto{
+    tipo : TipoContacto
+    valor: String 
+}
+
+enum TipoContacto{
+    WPP,
+    EMAIL,
+    TELEFONO
+}
+
+class Direccion{
+    -calle:String 
+    -altura:String
+    -barrio: Barrio
+}
+
+class Barrio{
+    -nombre
+}
+
+
+
+PersonaSolidaria-->Direccion
+PersonaSolidaria-->"*"MedioContacto
+FormaDeColaborar-->TipoColaboracion
+PersonaSolidaria-->"*"FormaDeColaborar
+FormaDeColaborar-->Vehiculo
+FormaDeColaborar-->Vianda
+MedioContacto-->TipoContacto
+FormaDeColaborar-->Frecuencia
+Direccion-->Barrio
+
+}
+
+package Heladeras{
+
+class Heladera{
+    -nombre: String
+    -coordenada: Coordenada
+    -maxCapacidadViandas:Int 
+    -minCapacidadViandas:Int
+    -viandasActuales: Int
+    -temperaturaActualCelcius: Float
+    -verificacionTemp: LocalDateTime
+    -activa: Boolean
+
+    +verificarTemperatura():void
+}
+
+class Coordenada{
+    -lat: Double
+    -long: Double
+}
+
+class Alarma{
+    -heladera: Heladera
+    -fecha : LocalDateTime
+    -detalle: String 
+
+    +contenido() : String
+}
+
+interface Mensaje{
+    +contenido() : String
+}
+
+class NotificacionStock implements Mensaje{
+    -heladera:Heladera
+    -fecha:LocalDateTime
+    -detalle:String
+
+    +contenido() : String
+}
+
+class Personal{
+    -tipo: TipoPersonal
+    -nombre:String
+    -medioContacto: MedioContacto
+    -zona: Barrio
+}
+
+enum TipoP
+
+class Notificador{
+    + enviar(mensaje Mensaje, destinatario Personal) : void
+}
+
+Heladera-->Coordenada
+
+}
+
+
+
+
+@enduml
