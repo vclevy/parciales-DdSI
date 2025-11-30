@@ -1,0 +1,146 @@
+@startuml salvandoAnimales
+
+class Individuo{
+    -dispositivo: Dispositivo
+    -fechaColocacion: LocalDate
+    -peso : Float
+    -altura : Float
+    -especie : Especie
+    -grupo : Grupo
+}
+
+class Especie{
+    -nombre : String
+    -caracteristicas: String 
+    -description: String 
+}
+
+class Grupo{
+    -nombre: String
+    -color: Strong
+    -colonia : Colonia
+}
+
+class Colonia{
+    -nombre: String
+    -individuos: List<Individuo>
+}
+
+class Dispositivo{
+    -numero: int
+    -sensores: List<Sensor>
+}
+
+class Sensor{
+    -tipoSensor : tipoSensor
+    -medicionTermica: List<MedicionTermica>
+    -medicionCardiaca: List<MedicionCardiaca>
+    -medicionGeo: List<MedicionGeo>
+}
+
+enum tipoSensor{
+    termico
+    cardiaco,
+    geoposicional
+}
+
+class MedicionTermica{
+    -fecha: LocaldateTime
+    -tempAmbiente_Celsius : Float
+    -unidad: Unidad
+}
+
+class MedicionCardiaca{
+    -fecha: LocaldateTime
+    -frecuenciaCardiaca: Float
+    -unidad: Unidad
+}
+
+class MedicionGeo{
+    -dia:LocalDate
+    -RecorridoPorDia:Float
+    -fecha: LocaldateTime
+    -unidad: Unidad
+}
+
+enum Unidad{
+    celsius,
+    minutos,
+    km
+}
+
+
+class Cientifico {
+    -nombre: String
+    -apellido: String
+    -areaEspecializacion: AreaEspecializacion
+    -nroMatricula: String
+}
+
+class AreaEspecializacion{
+    nombre: String
+}
+
+class Estudio{
+    -cientifico: Cientifico
+    -nombre: String
+    -descr : String
+    -fecha : LocaldateTime
+    -colonia : Colonia
+    -grupos : List<Grupo>
+    -secciones: List<Seccion>
+    -estados : List<Estado>
+    -finalizado : Boolean
+}
+
+class Estado{
+    -tipoEstado : TipoEstado
+    -fechaModificacion : LocaldateTime
+    -responsable : String
+    -detalle : String
+}
+
+class Seccion{
+    -nombre: TipoSeccion
+    -contenido: String
+}
+
+enum TipoSeccion{
+    INTRODUCCION, 
+    JUSTIFICACION,
+    ESTUDIO_INICIAL
+}
+
+enum TipoEstado{
+    EN_PROCESO,
+    FINALIZADO,
+    EN_REVISION,
+    PUBLICADO
+}
+
+class GeneradorSecciones{
+    -algoritmo: Algoritmo
+    + completarEstudio(estudio Estudio) : void
+}
+
+interface AlgoritmoGenerador{
+    + generarSecciones(estudio Estudio): List<Seccion>
+}
+
+Individuo --> Dispositivo
+Individuo --> Especie
+Individuo --> Grupo
+Grupo --> Colonia
+Colonia --> "*" Individuo
+Dispositivo --> "*" Sensor
+Sensor --> tipoSensor
+Sensor -->"*"MedicionCardiaca
+Sensor -->"*"MedicionGeo
+Sensor -->"*"MedicionTermica
+MedicionTermica --> Unidad
+MedicionGeo --> Unidad
+MedicionCardiaca --> Unidad
+GeneradorSecciones..>Estudio
+GeneradorSecciones..>AlgoritmoGenerador
+
+@enduml
