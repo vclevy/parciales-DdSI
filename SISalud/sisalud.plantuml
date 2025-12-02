@@ -1,0 +1,75 @@
+@startuml
+
+class Ciudadano{
+    -nombre: String 
+    -apellido: String 
+    -dni: String
+    -email: String 
+    -ubicaciones: List
+}
+
+class Ubicacion{
+    -lat: Double
+    -long: Double
+    -barrio: Barrio  
+    -tipoZona : TipoZona 
+    -fechaRegistro: LocalD 
+    -detalle: 
+}
+
+class PerfilSanitario{
+    -grupoEtario: Etario
+    -vacunas : List<Vacuna>
+    -factoresRiesgo : List<FactorRiesgo>
+}
+
+class Vacuna{
+    -tipoVacuna: String 
+    -estadoVacuna: //ENUM COMPLETO INCOMPLETA VACIA
+    -ultimaDosis:LocalDateTime
+}
+
+class FactorRiesgo{
+    -gradoRiesgo // ENUM LEVE MODERADO ALTO
+    eventoSanitario : Evento
+}
+
+class EventoSanitario{
+    -nombre:String 
+}
+
+ENUM Etario{
+    JOVEN,
+    ADULTO,
+    NIÑE
+}
+
+'------------Solucion valenx-------------
+class BuscadorGeografico{
+    +obtenerCiudadanos(Criterio criterio): List<Ciudadano>
+}
+
+interface Criterio{
+    buscar();
+}
+
+class RadioXKm implements Criterio{ 
+    -punto
+    -radio 
+    +buscar() : List<Ciudadano> // y asi con las otras dos strats
+}
+'-------------------------
+
+'------------Solucion Delfi-------------
+
+interface BuscadorGeografico{
+    +obtenerCiudadanos(): List<Ciudadano>
+}
+
+class RadioXKm implements BuscadorGeografico{
+    -punto
+    -radio 
+    +obtenerCiudadanos(): List<Ciudadano
+}
+
+@enduml

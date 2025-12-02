@@ -1,0 +1,16 @@
+el user es igual para ambas, con campos nulleables
+no tienen comportamiento distinto
+
+class GestorDePublicaciones es un cron que corre todas las horas y chequea en base al plan en el que fue publicado (se saca del usuario) si todavía le corresponde ser mostrada o no
+lo hace por lotes y no por cada publicacion individual, así se usa menos procesamiento. 
+también chequea en base a la cantidad q el usuario ya haya publicado en el mes, si le cirresponde poder publicar o no (Desnormalizo las publicacoines publicadas en el mes x el usuario p por performance)
+
+creo una clase Plan con un tipo. la cantidad de publicaciones mensuales corresponde con el tipo (se llena atuomaticamente al contratar), y las horas de vibilidad también se setean 
+como corresponda, excepto en el premium (ahí es e usuario quién elige las horas de visibilidad totales, y luego el gestor se encarga de chequear en base a esas horas)
+
+class GestorDePublicaciones{
+    +chequearVisibilidad(publicaciones List<Publicacion>) : void
+}
+// pseudo:
+publicacoin.usuario.plan.sePuedeMostrar() && horasMostradas < a lo que corresponda del plan --> si puede el estado es "activa"
+

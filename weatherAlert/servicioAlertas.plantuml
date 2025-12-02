@@ -157,7 +157,7 @@ enum Severidad{
     DomiciliosAfectados-->"*"Direccion
     Recomendador..>DomiciliosAfectados
     Recomendador..>INotificador
-    OrganismosExternosAdapter --> OrganismoExterno
+    OrganismosExternosAdapter --> OrganismosExternos
 
 }
     @enduml

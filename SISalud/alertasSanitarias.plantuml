@@ -1,0 +1,92 @@
+@startuml
+
+class SuscriptorProxy{
+    -proxyAdapter: IProxyAdapter
+    +suscribirseA(topic String, callback String): void
+}
+
+interface IProxyAdapter{
+    +suscribirse(topic String, callback String): void
+}
+
+class SanidadProxyAdapter implements IProxyAdapter{
+    -sanidadProxy : SanidadProxy
+    +suscribirse(topic String, callback String): void
+}
+
+class SanidadProxy{
+    +suscribirse(topic String, callback String): void
+}
+
+class IdentificadorCiudadanos{
+    -servicioCiudadanos: ServicioCiudadanos
+    +identificarCiudadanosSegun(filtro FiltroDTO) : List<CiudadanoDTO>
+}
+
+class ServicioCiudadanos{
+    +identificarCiudadanosSegun(filtro FiltroDTO) : List<CiudadanoDTO>
+}
+
+class Evento{
+    -tipo: TipoEvento
+    -fechInicio: LocalDateTime
+    -zona: Barrio
+    nivel : ENUM //CRITICO, EXTREMO, ALTO
+}
+
+enum TipoEvento{
+    BROTE_RESPIRATORIO,
+    ALERTA_AMBIENTAL,
+    TOXINA_ALIMENTARIA
+}
+
+class Barrio{
+    -nombre: String
+}
+
+class AnalizadorEventos{
+    -recomendador: GeneradorRecomendaciones
+    'Cron que corre cada 1h
+    +analizarEventos(List<Evento>):void
+}
+
+class GeneradorRecomendaciones{
+    generarRecomendacionPara(evento, afectados) : List<Recomendacion>
+}
+
+class Recomendacion{
+    detalle : Str
+    Ciudadano 
+    fechaGeneracion 
+    evento 
+}
+
+interface IaAdapter{
+    +enriquecerRecomendacion(recomendacionDto): void
+}
+
+class GptAdapter implements IaAdapter{
+    -gpt: Gpt
+    +enriquecerRecomendacion(recomendacionDto): void
+}
+
+class Gpt{
+    +enriquecerRecomendacion(recomendacionDto): void
+}
+
+interface INotificador{
+    +notificar(mensaje Mensaje, ciudadano Ciudadano):void
+}
+
+class EmailSender implements INotificador{
+    +notificar(mensaje Mensaje, ciudadano Ciudadano):void
+}
+
+class NotificadorPush implements INotificador{
+    +notificar(mensaje Mensaje, ciudadano Ciudadano):void
+}
+
+IdentificadorCiudadanos-->ServicioCiudadanos
+GeneradorRecomendaciones..>IdentificadorCiudadanos
+
+@enduml

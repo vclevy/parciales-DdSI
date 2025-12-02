@@ -1,0 +1,210 @@
+@startuml
+
+package GestionDeAnimales{
+
+class Animal{
+    -nombre: String 
+    -especie: Especie
+    -sexo: Sexo 
+    -fechaNacimiento: LocalDateTi 
+    -pesoAprox_kg: Integer
+    -zonaReservaHabitual : Zona
+    -color : String
+    -marcasDitintivas
+    -dispositivo : Dispositivo 
+    -observaciones : String 
+    -historialSanitario : List<HistorialSanitario>
+}
+
+class Especie{
+    -nombre: String 
+}
+
+class Dispositivo{
+    -tipo: TipoDispositivo
+    -idExterno: Long 
+}
+
+class HistorialSanitario {
+    -fecha: LocalDateTime
+    -tipoEvento: TipoEvento
+    -descripcion: String
+    -profesional: Medico 
+    -parametros: List<Parametro>
+    -archivos: List<String>
+}
+
+class Parametro{
+    -tipo: String
+    -valor: Float
+    -unidad: String
+}
+
+class Jornada{
+    -cuidador: Cuidador
+    -animales: List<Animal> 
+    -horaInicio: LocalDateTime
+    -fechaFin: LocalDateTime
+    -zona: Zona
+}
+
+class Reserva{
+    -nombre: String 
+    -zonas: List<Zona>
+}
+
+class Zona{
+    nombre
+    descripcion
+    hectareas
+    cantMax
+    tipoPredominanteHabitat : //ENUM
+    dispositivos : List<Dispositivo>
+}
+
+class Cuidador{
+    -nombre: String 
+    
+}
+
+class Medico{
+    -tipo: TipoMedico
+    -nombre: String 
+}
+
+enum TipoMedico{
+    PROFESIONAL,
+    INSTITUCION
+}
+
+enum Sexo{
+    MACHO,
+    HEMBRA
+}
+
+
+Animal--> Especie
+Animal --> Sexo
+Animal --> Zona
+Animal --> Dispositivo
+Animal -->"*" HistorialSanitario
+HistorialSanitario --> Medico
+HistorialSanitario " * " ..> Parametro
+Jornada --> Cuidador
+Jornada  -->" * " Animal
+Jornada --> Zona
+Reserva -->"*" Zona
+Medico --> TipoMedico
+Zona -->"*" Dispositivo
+
+    
+}
+
+
+package RecepcionYProcesamiento {
+
+class Dispositivo {
+    numero_serie: Int
+    tipo: Tipo
+    modelo: String
+    estado_operativo: Estado
+    fecha_ultima_comu: LocalDateTime
+    bateria: Int
+}
+
+class Lectura{
+    -dispositivo: Dispositivo
+    -fecha: LocalDateTime
+    -hayMovimiento: Bool
+    -decibeles: Float
+    -temperaturaCelcius: Float
+    -humedadPascal:Float 
+    -gps: GPS
+}
+
+class GPS{
+    -lat:Double
+    -long: Double
+    -nivelActividad: String 
+}
+
+class Tipo {
+    -nombre:String 
+    -clase: Clase
+}
+
+enum Clase{
+    AMBIENTAL,
+    RASTEO
+}
+
+interface Command{
+    +ejecutar():void
+}
+
+class PrenderLuz implements Command {
+    -luz: Luz
+    + ejecutar()
+
+}
+
+class EmitirSonido implements Command {
+    -parlante: Parlante 
+    +ejecutar()
+}
+
+class AbrirDispenser implements Command {
+    'Spencer el dispenser
+    -dispenser : Dispenser 
+    +ejecutar()
+}
+
+class Dispenser{
+    +abrirDispenser(): void
+}
+
+class Parlante{
+    +hacerSonido():void
+}
+
+class Luz{
+    +emitirLuz():void
+}
+
+}
+
+package IAyAlertas{
+
+class Analizador{
+    analizarDatos(datos List<DatoDTO>) : Evento
+}
+
+
+class Alerta {
+    -tipoAlerta: TipoAlerta
+    -zona: Zona
+    -animales: List<Animal>
+    -fechaHora: LocalDateTime
+    -evento: Evento
+    
+}
+
+interface INotificador{
+    notificar(alerta Alerta, destinatario)
+}
+
+class Cuidador{
+    idExterno
+    mail
+}
+interface RutinasAdapter{
+    +notificar(alerta)
+}
+
+class Rutinas implements RutinasAdapter{
+    +notificar(alerta Alerta):void
+}
+
+
+}
+@enduml

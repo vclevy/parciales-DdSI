@@ -1,0 +1,164 @@
+@startuml
+
+class Propiedad{
+    ubicacion : Ubicacion
+    tipoPropiedad : TipoPropiedad
+    cantAmb
+    cantBañ
+    cantDorm
+    m2Cubiertos
+    m2Totales
+    anitguiedad 
+    estado : EstadoPropiedad
+    aceptaMascotas
+    cantCocheras
+    precio
+    moneda : Moneda
+    precoiNegociable : boolean
+    historial : List<Modificacion>
+    dadaDeBaja : boolean
+    usuario : Usuario
+    multimedia : List<String>
+
+}
+
+class Modificacion{
+    campoAfectado
+    valorAnterior
+    valorNuevo
+    fechaMod
+}
+
+
+class EstadoPropiedad{
+    A_eSTRENAR,
+    USADO,
+    EN_CONSTRUCCION
+}
+
+class Ubicacion{
+    lat
+    long 
+    calle 
+    altura 
+}
+
+class TipoPropiedad{
+    nombre 
+}
+
+class Usuario{
+    nombre
+    apellido
+    dni
+    correo
+    telefono
+    cuit 
+    representanteLegal
+    cantPublicacionesMensuales : Integer
+    plan : Plan
+}
+
+class Plan{
+    tipoPlan : TipoPlan
+    cantHorasVisibilidadMes 
+    cantPublicacionesMensualesPermitidas
+
+    +puedeMostrarse(publicacion Publicacion)
+}
+
+class TipoPlan{
+    GRATUITO,
+    DESTACADO,
+    PREMIUM
+}
+
+class Publicacion{
+    tipoOperacion : TipoOperacion
+    propiedad : Propiedad
+    descripcion
+    Ubicacion : Ubicacion
+    precio
+    moneda : Moneda
+    multimedia : List<String>
+    tag : Tag
+    estadoActual : Estado
+    estados : List<Estado>
+    fechaInicioVisibilidad
+    fechaFinVisibilidad // si corresponde del plan
+    prioridad : Boolean
+    usuario : Usuario
+    cantHorasQueFueMostrada
+    cerrada : boolean
+}
+
+class GestorDePublicaciones{
+    +chequearVisibilidad(Publicaciones) : void
+}
+class Consulta{
+    publicacion : Publicacion
+    usuario : Usuario
+    nombreInteresado
+    apellidoInteresado
+    correo
+    telefono
+    mensaje
+    fecha : LocalDateTime
+    respondida: Boolean
+    fechaRespuesta
+}
+
+class Estado{
+    tipo : TipoEstado
+    fecha 
+}
+
+enum TipoEstado{
+    ACTIVA,
+    PAUSADA,
+    PENDIENTE,
+    FINALIZADA
+}
+
+class Tag{
+    nombre
+}
+
+class Moneda{
+    ARS,
+    DLS
+}
+enum TipoOperacion{
+    venta
+    alquiler
+    alquiler temp
+}
+
+interface IPagosAdapter{
+    +pagarPlan(monto Float,medioPago MedioPago,callback) : Pago
+}
+
+class GeoPagosAdapter implements IPagosAdapter{
+    geoPagos : GeoPagos
+    +pagarPlan(monto Float,medioPago MedioPagodto ,callback) : Pago
+}
+
+class GeoPagos  {
+    +pagarPlan(monto Float,medioPago MedioPagodto,callback) : Pago
+}
+
+class Pago{
+    medioPago 
+    usuario 
+    estado // rechazado, confirmado
+    factura 
+}
+
+class factura{
+    monto
+    medioPago 
+    etc.
+}
+
+class ModeradorDeContenido
+@enduml
