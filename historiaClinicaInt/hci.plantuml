@@ -1,0 +1,94 @@
+@startuml
+
+class Paciente{
+    -nombre: String 
+    -apellido: String 
+    -dni: String 
+    -historiaClinica: HistoriaClinica
+}
+
+class HistoriaClinica{
+    ordenes : 
+    tratamientos 
+    estudio 
+    consultas 
+    diagnosticos 
+
+    actualizacionHistorial
+}
+
+class AccesoAHistoriaClinica{
+    -historiaClinica:HistoriaClinica
+    -fecha:LocalDateTime
+    -usuario:String
+}
+
+class actualiizacionHistorial{
+    fecha 
+    orden
+    tratamiento 
+    consulta 
+    diagnostico 
+    descripcion 
+
+    -medico: Medico
+    -resultado: String 
+    -informe: Informe
+    -involucrados: Involucrado
+}
+
+class Orden{
+    fecha
+    Medico 
+}
+
+class Consulta{
+    -medico: Medico
+    -descripcion: String 
+    -costo: Float
+}
+class Informe{
+    -medico: Medico
+    -contenido: Strig
+}
+
+class Estudio{
+    -informe: Informe 
+    -deAlta: Boolean
+    -costo : Float
+}
+
+class Tratamiento{
+    -diagnostico: Diagnostico 
+    -medicamentos: List<Receta>
+    -dosisSuministradas: List<Dosis>
+    -involucrados: List<Involucrado>
+    -medico: Medico
+}
+
+class Dosis{
+    -unidad : Unidad 
+    -fechaSuministro: LocalDateTime
+    -cantidad: Float  
+    -medicamento: Medicamento
+}
+
+class Receta{
+    -medicamento: Medicamento 
+    -indicacion: String 
+}
+
+class Medicamento{
+    -nombre: String 
+    -unidad: Unidad
+}
+
+class Especialidad{
+    -nombre:String 
+    -directorArea: Medico
+}
+
+
+
+
+@enduml
